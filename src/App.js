@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import ganache from 'ganache-cli';
 
 import HDWalletProvider from 'truffle-hdwallet-provider';
 import web3  from './web3';
@@ -12,28 +11,18 @@ import { charityOptions } from './common'
 import './App.css';
 
 
-// const provider = new HDWalletProvider(
-//   'call glow acoustic vintage front ring trade assist shuffle mimic volume reject',
-//   'https://rinkeby.infura.io/orDImgKRzwNrVCDrAk5Q'
-// );
-// const web3 = new Web3(provider);
-
-
-var accounts = web3.eth.accounts;
-console.log(accounts);
 class App extends Component {
 
-  componentDidMount(){
+  async componentDidMount(){
+    const accounts = await web3.eth.accounts;
 
     if (typeof web3 !== 'undefined') {
-      this.setState({ hasWeb3: true })
-      // console.log('has web account', web3.eth.accounts[0]);
-      // console.log('we have');
-      // console.log('web3', web3);
-      // web3 = new Web3(web3.currentProvider);
+
     } else {
 
     }
+
+    this.setState({ account: accounts[0]})
   }
 
   handleEthAmount = (e, {value}) => {
@@ -52,10 +41,6 @@ class App extends Component {
   }
 
   render() {
-
-    // web3.eth.getAccounts()
-    // .then( console.log)
-
 
     return (
       <div className="App">
