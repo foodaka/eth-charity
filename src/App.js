@@ -11,21 +11,21 @@ import { charityOptions } from './common'
 import './App.css';
 
 
+
+
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {hasSuccess: false}
+    this.state = { hasSuccess: false, selectedCharity: '' }
   }
 
   async componentDidMount(){
-    const accounts = await web3.eth.accounts;
+    // const accounts = await web3.eth.accounts;
+    const accounts = await web3.eth.getAccounts();
 
-    if (typeof web3 !== 'undefined') {
-
-    } else {
-
+    if(accounts.length < 1) {
+      this.setState({ errorMessage: 'You must log into MetaMask and use chrome to send ether' })
     }
-
     this.setState({ account: accounts[0]})
   }
 
@@ -33,16 +33,22 @@ class App extends Component {
     this.setState({ amount: value });
   }
 
-  sendEth = () => {
-     web3.eth.sendTransaction({
-      to: '0x0cd8Ed26744FFF2F2007d5F4787922a3D4832C54',
-      value: web3.toWei('1','ether'),
-      from: this.state.account
-    },(err) => {
-      console.log('err',err);
-    })
+  sendEth = async () => {
+    const { selectedCharity } = this.state;
 
-    this.setState({ hasSuccess: 'You have sent the ETH' })
+    try {
+      await web3.eth.sendTransaction({
+        to: selectedCharity,
+        value: web3.utils.toWei( this.state.amount,'ether'),
+        from: this.state.account
+      })
+    } catch(err) {
+      console.log('error', err);
+    }
+  }
+
+  handleSelectCharity = (e,{value}) => {
+    this.setState({ selectedCharity: value });
   }
 
   render() {
@@ -54,11 +60,22 @@ class App extends Component {
         </header>
         <div className='payment'>
           <Card fluid header="Payment">
-            <Dropdown placeholder='Select A Charity' fluid selection options={charityOptions} />
+            <Dropdown
+              onChange={this.handleSelectCharity}
+              placeholder='Select A Charity'
+              fluid
+              selection
+              options={charityOptions}
+            />
             <h2>Enter Amount</h2>
             <Input onChange={this.handleEthAmount} />
             <Button color="green" onClick={this.sendEth}>Send ETH!</Button>
           </Card>
+          { this.state.errorMessage &&
+            <div style={{color:'red'}}>
+              {this.state.errorMessage}
+            </div>
+          }
           { this.state.hasSuccess && <div style={{color:'green'}}>{this.state.hasSuccess}</div>}
         </div>
       </div>
