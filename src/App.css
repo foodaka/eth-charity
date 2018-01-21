@@ -4,7 +4,10 @@
   line-height: 24px;
   font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
   color: #666;
-  background: rgba(0, 0, 0, 0)
+  background: #f2f2f2;
+  min-height: 100vh;
+
+  /*background: rgba(0, 0, 0, 0)*/
 }
 
 h1 {
@@ -33,13 +36,22 @@ h1 {
 .payment {
   max-width: 750px;
   margin: 0 auto;
+  margin-top: 80px;
 }
 
-.App-intro {
-  font-size: large;
+
+.charity {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 20px;
+  flex-direction: column;
+  padding-bottom: 20px;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.dropdown {
+
+}
+
+.section {
+  padding: 24px;
 }

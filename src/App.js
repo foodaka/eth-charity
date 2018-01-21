@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 
 import HDWalletProvider from 'truffle-hdwallet-provider';
 import web3  from './web3';
-import { Card, Input, Dropdown, Button } from 'semantic-ui-react';
+import { Card, Input, Dropdown, Button, Label } from 'semantic-ui-react';
+import { SweetAlert } from './components/sweetalert';
 
 import logo from './logo.svg';
 
 import { charityOptions } from './common'
 
 import './App.css';
-
-
-
 
 class App extends Component {
   constructor(props) {
@@ -34,14 +32,34 @@ class App extends Component {
   }
 
   sendEth = async () => {
+
+    // SweetAlert({
+    //   title:'Sending Ether',
+    //   text:'trying to send ether, will notify you on success, this may take up to 30 seconds',
+    //   type:'info'
+    // })
+
     const { selectedCharity } = this.state;
 
     try {
-      await web3.eth.sendTransaction({
+      const sendEth = await web3.eth.sendTransaction({
         to: selectedCharity,
-        value: web3.utils.toWei( this.state.amount,'ether'),
+        // value: web3.utils.toWei( this.state.amount,'ether'),
+        value: (this.state.amount,'ether'),
+
         from: this.state.account
       })
+
+      console.log('sendEth', sendEth);
+
+
+      if(sendEth) {
+        SweetAlert({
+          title:'Success',
+          text:'You have successfully sent the transaction',
+          type:'success'
+        })
+      }
     } catch(err) {
       console.log('error', err);
     }
@@ -60,16 +78,27 @@ class App extends Component {
         </header>
         <div className='payment'>
           <Card fluid header="Payment">
-            <Dropdown
-              onChange={this.handleSelectCharity}
-              placeholder='Select A Charity'
-              fluid
-              selection
-              options={charityOptions}
-            />
-            <h2>Enter Amount</h2>
-            <Input onChange={this.handleEthAmount} />
-            <Button color="green" onClick={this.sendEth}>Send ETH!</Button>
+            <div className="section">
+              <div className="charity">
+                <div>Select Charity</div>
+                <Dropdown
+                  onChange={this.handleSelectCharity}
+                  placeholder='Select A Charity'
+                  selection
+                  className="dropdown"
+                  options={charityOptions}
+                />
+              </div>
+              <div className="charity">
+                <div>Enter Amount In Ethereum</div>
+                <Input onChange={this.handleEthAmount} labelPosition='right' type='text' placeholder='Amount'>
+                  <Label basic>$</Label>
+                  <input />
+                  <Label>.00</Label>
+                </Input>
+              </div>
+            </div>
+            <Button color="green" onClick={this.sendEth}>Donate Now!</Button>
           </Card>
           { this.state.errorMessage &&
             <div style={{color:'red'}}>
