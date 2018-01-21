@@ -18,7 +18,6 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    // const accounts = await web3.eth.accounts;
     const accounts = await web3.eth.getAccounts();
 
     if(accounts.length < 1) {
@@ -33,12 +32,6 @@ class App extends Component {
 
   sendEth = async () => {
 
-    // SweetAlert({
-    //   title:'Sending Ether',
-    //   text:'trying to send ether, will notify you on success, this may take up to 30 seconds',
-    //   type:'info'
-    // })
-
     const { selectedCharity } = this.state;
 
     try {
@@ -48,10 +41,7 @@ class App extends Component {
         value: (this.state.amount,'ether'),
 
         from: this.state.account
-      })
-
-      console.log('sendEth', sendEth);
-
+      });
 
       if(sendEth) {
         SweetAlert({
@@ -61,7 +51,12 @@ class App extends Component {
         })
       }
     } catch(err) {
-      console.log('error', err);
+      console.log('err', err);
+      SweetAlert({
+        title: 'Oops',
+        text: 'An error occured',
+        type: 'error'
+      })
     }
   }
 
@@ -86,12 +81,13 @@ class App extends Component {
                   placeholder='Select A Charity'
                   selection
                   className="dropdown"
+                  fluid
                   options={charityOptions}
                 />
               </div>
               <div className="charity">
                 <div>Enter Amount In Ethereum</div>
-                <Input onChange={this.handleEthAmount} labelPosition='right' type='text' placeholder='Amount'>
+                <Input className='input' onChange={this.handleEthAmount} labelPosition='right' type='text' placeholder='Amount'>
                   <Label basic>$</Label>
                   <input />
                   <Label>.00</Label>
@@ -100,12 +96,6 @@ class App extends Component {
             </div>
             <Button color="green" onClick={this.sendEth}>Donate Now!</Button>
           </Card>
-          { this.state.errorMessage &&
-            <div style={{color:'red'}}>
-              {this.state.errorMessage}
-            </div>
-          }
-          { this.state.hasSuccess && <div style={{color:'green'}}>{this.state.hasSuccess}</div>}
         </div>
       </div>
     );
