@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-
 import HDWalletProvider from 'truffle-hdwallet-provider';
+
 import web3  from './web3';
-import { Card, Input, Dropdown, Button, Label } from 'semantic-ui-react';
+import { Card, Input, Dropdown, Button, Label, Loader } from 'semantic-ui-react';
 import { SweetAlert } from './components/sweetalert';
-
-import logo from './logo.svg';
-
-import { charityOptions } from './common'
+import { charityOptions } from './common';
+// import PaymentHistoryTable from './components/table';
+import { Receipt } from './components/receipt';
 
 import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props)
-    this.state = { hasSuccess: false, selectedCharity: '' }
+    this.state = { hasSuccess: false, selectedCharity: '', sentSuccess: false, isLoading: false }
   }
 
   async componentDidMount(){
@@ -34,12 +33,12 @@ class App extends Component {
 
     const { selectedCharity } = this.state;
 
+    this.setState({ isLoading: true})
+
     try {
       const sendEth = await web3.eth.sendTransaction({
         to: selectedCharity,
-        // value: web3.utils.toWei( this.state.amount,'ether'),
-        value: (this.state.amount,'ether'),
-
+        value: web3.utils.toWei( this.state.amount,'ether'),
         from: this.state.account
       });
 
@@ -49,14 +48,25 @@ class App extends Component {
           text:'You have successfully sent the transaction',
           type:'success'
         })
+
+        this.setState({
+          transactionHash: sendEth.transactionHash,
+          contractAddress: sendEth.contractAddress,
+          sentTo: sendEth.to,
+          gasUsed: sendEth.gasUsed,
+          blockHash: sendEth.blockHash,
+          from: sendEth.from,
+          sentSuccess: true,
+          isLoading: false
+        })
       }
     } catch(err) {
-      console.log('err', err);
       SweetAlert({
         title: 'Oops',
         text: 'An error occured',
         type: 'error'
       })
+      this.setState({ isLoading: false });
     }
   }
 
@@ -65,38 +75,50 @@ class App extends Component {
   }
 
   render() {
+    const { sentSuccess } = this.state;
 
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>Make A Donation</h1>
-        </header>
-        <div className='payment'>
-          <Card fluid header="Payment">
-            <div className="section">
-              <div className="charity">
-                <div>Select Charity</div>
-                <Dropdown
-                  onChange={this.handleSelectCharity}
-                  placeholder='Select A Charity'
-                  selection
-                  className="dropdown"
-                  fluid
-                  options={charityOptions}
-                />
+        <div style={{display: sentSuccess ? 'none' : ''}}>
+          <header className="App-header">
+            <h1>Make A Donation</h1>
+          </header>
+          <Loader active={this.state.isLoading} inline='centered'>
+            Sit Tight, this could take up to 30seconds to process...
+          </Loader>
+
+          <div className='payment'>
+            <Card fluid header="Payment">
+              <div className="section">
+                <div className="charity">
+                  <div>Select Charity</div>
+                  <Dropdown
+                    onChange={this.handleSelectCharity}
+                    placeholder='Select A Charity'
+                    selection
+                    className="dropdown"
+                    fluid
+                    options={charityOptions}
+                  />
+                </div>
+                <div className="charity">
+                  <div>Enter Amount In Ethereum</div>
+                  <Input className='input' onChange={this.handleEthAmount} >
+                    <Label basic>ETH</Label>
+                    <input />
+                  </Input>
+                </div>
               </div>
-              <div className="charity">
-                <div>Enter Amount In Ethereum</div>
-                <Input className='input' onChange={this.handleEthAmount} labelPosition='right' type='text' placeholder='Amount'>
-                  <Label basic>$</Label>
-                  <input />
-                  <Label>.00</Label>
-                </Input>
-              </div>
-            </div>
-            <Button color="green" onClick={this.sendEth}>Donate Now!</Button>
-          </Card>
+              <Button color="green" onClick={this.sendEth}>Donate Now!</Button>
+            </Card>
+          </div>
         </div>
+
+        { sentSuccess &&
+          <div>
+            <Receipt {...this.state} />
+          </div>
+        }
       </div>
     );
   }

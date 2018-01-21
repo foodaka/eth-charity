@@ -1,0 +1,34 @@
+.receiptWrapper {
+  background: #FFFFFF;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  top: 150px;
+  font-size: 18px;
+}
+
+.sectionDetails {
+  display: flex;
+  /*justify-content: space-between;*/
+  padding: 24px;
+}
+
+.sectionDetails > div:first-child  {
+  flex: 2;
+  display: flex;
+}
+
+.sectionDetails > div:last-child  {
+  flex: 8;
+  margin-left: 75px;
+  display: flex;
+}
+
+.details {
+  background: #00b5ad;
+  color: #FFFFFF;
+  height: 60px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
