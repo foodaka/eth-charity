@@ -6,37 +6,43 @@
   color: #666;
   background: #f2f2f2;
   min-height: 100vh;
+  background-size:cover;
+  font-family: 'Raleway', sans-serif;
+
 
   /*background: rgba(0, 0, 0, 0)*/
 }
-
-h1 {
-  font-family: 'Raleway,"Helvetica Neue",Helvetica,Arial,sans-serif';
-  font-weight: 100;
-}
-
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-  line-height: 64px;
-}
-
 .App-header {
-  background-color: #222;
+  /*background-color: #222;*/
   height: 150px;
   padding: 20px;
-  color: white;
+  /*color: white;*/
 }
 
-.App-title {
-  font-size: 1.5em;
-}
 
 .payment {
   max-width: 750px;
   margin: 0 auto;
   margin-top: 80px;
+}
+.payment > div {
+  background: #1b1f1f !important;
+  /*border: none !important;*/
+  box-shadow: none !important;
+}
+
+.ethSymbol {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center
+}
+
+.title {
+  color: #FFFFFF;
+  font-family: 'Raleway', sans-serif;
+  font-size: 3em;
+  letter-spacing: 2.0px;
 }
 
 
@@ -46,6 +52,16 @@ h1 {
   padding-top: 20px;
   flex-direction: column;
   padding-bottom: 20px;
+  min-width: 300px;
+}
+
+.charity > div {
+  width: 100%;
+  text-align: center;
+  color: #FFFFFF;
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  padding-bottom: 10px;
 }
 
 .dropdown {
@@ -56,6 +72,16 @@ h1 {
   min-width: 300px !important;
 }
 
+.donate {
+  min-width: 300px !important;
+  padding:15px !important;
+  font-family: 'Raleway', sans-serif;
+}
+
 .section {
   padding: 24px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }

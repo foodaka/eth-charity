@@ -7,6 +7,7 @@ import { SweetAlert } from './components/sweetalert';
 import { charityOptions } from './common';
 // import PaymentHistoryTable from './components/table';
 import { Receipt } from './components/receipt';
+import sprout from './sprout.jpg';
 
 import './App.css';
 
@@ -78,10 +79,10 @@ class App extends Component {
     const { sentSuccess } = this.state;
 
     return (
-      <div className="App">
+      <div className="App" style={{ backgroundImage: `url(${sprout})` }} >
+
         <div style={{display: sentSuccess ? 'none' : ''}}>
           <header className="App-header">
-            <h1>Make A Donation</h1>
           </header>
           <Loader active={this.state.isLoading} inline='centered'>
             Sit Tight, this could take up to 30seconds to process...
@@ -90,6 +91,7 @@ class App extends Component {
           <div className='payment'>
             <Card fluid header="Payment">
               <div className="section">
+                <h1 className="title">Make A Donation</h1>
                 <div className="charity">
                   <div>Select Charity</div>
                   <Dropdown
@@ -104,12 +106,12 @@ class App extends Component {
                 <div className="charity">
                   <div>Enter Amount In Ethereum</div>
                   <Input className='input' onChange={this.handleEthAmount} >
-                    <Label basic>ETH</Label>
+                    <Label className="ethSymbol" basic>ETH</Label>
                     <input />
                   </Input>
                 </div>
+                <Button className="donate" inverted standard onClick={this.sendEth}>Donate Now!</Button>
               </div>
-              <Button color="green" onClick={this.sendEth}>Donate Now!</Button>
             </Card>
           </div>
         </div>
