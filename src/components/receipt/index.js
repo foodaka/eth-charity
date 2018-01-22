@@ -5,7 +5,7 @@ import styles from './styles.css';
 export const Receipt = (props) => {
   const {
     transactionHash,
-    sentTo,
+    to,
     gasUsed,
     blockHash,
     from
@@ -22,7 +22,7 @@ export const Receipt = (props) => {
       </div>
       <div className="sectionDetails">
         <div>To:</div>
-        <div>{sentTo}</div>
+        <div>{to}</div>
       </div>
       <div className="sectionDetails">
         <div>Transaction Hash:</div>

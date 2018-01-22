@@ -9,16 +9,24 @@
   background-size:cover;
   font-family: 'Raleway', sans-serif;
 
-
-  /*background: rgba(0, 0, 0, 0)*/
 }
 .App-header {
-  /*background-color: #222;*/
   height: 150px;
   padding: 20px;
-  /*color: white;*/
 }
 
+.loading {
+  color: #FFFFFF !important;
+  position: absolute !important;
+  width: 100% !important;
+  top: 150px !important;
+}
+
+.loading > span {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.5em;
+  letter-spacing: 0.5px;
+}
 
 .payment {
   max-width: 750px;
@@ -27,8 +35,8 @@
 }
 .payment > div {
   background: #1b1f1f !important;
-  /*border: none !important;*/
   box-shadow: none !important;
+  opacity: 0.9 !important;
 }
 
 .ethSymbol {
@@ -57,6 +65,7 @@
 
 .charity > div {
   width: 100%;
+  color: #888888;
   text-align: center;
   color: #FFFFFF;
   font-family: 'Raleway', sans-serif;
