@@ -9,7 +9,8 @@ export const Receipt = (props) => {
     gasUsed,
     blockHash,
     from,
-    handleClose
+    handleClose,
+    amount
   } = props;
 
   return (
@@ -25,6 +26,10 @@ export const Receipt = (props) => {
       <div className="sectionDetails">
         <div>To:</div>
         <div>{to}</div>
+      </div>
+      <div className="sectionDetails">
+        <div>Amount:</div>
+        <div>{amount}</div>
       </div>
       <div className="sectionDetails">
         <div>Transaction Hash:</div>

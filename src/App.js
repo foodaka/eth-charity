@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import HDWalletProvider from "truffle-hdwallet-provider";
-
 import web3 from "./web3";
 import {
   Card,
@@ -10,6 +8,7 @@ import {
   Label,
   Loader
 } from "semantic-ui-react";
+
 import { SweetAlert } from "./components/sweetalert";
 import { charityOptions } from "./common";
 import { Receipt } from "./components/receipt";
@@ -18,23 +17,35 @@ import sprout from "./sprout.jpg";
 import "./App.css";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedCharity: "",
-      sentSuccess: false,
-      isLoading: false
-    };
-  }
+  state = {
+    selectedCharity: "",
+    sentSuccess: false,
+    isLoading: false,
+    errorMessage: false
+  };
 
   async componentDidMount() {
-    const accounts = await web3.eth.getAccounts();
+    try {
+      const accounts = await web3.eth.getAccounts();
 
-    if (accounts.length < 1) {
-      return this.triggerAccountErrorMessage();
+      if (accounts.length < 1) {
+        return this.triggerAccountErrorMessage();
+      }
+      this.setState({ account: accounts[0] });
+
+    } catch (err) {
+      return this.triggerGenereralErrorMessage();
     }
-    this.setState({ account: accounts[0] });
   }
+
+  triggerGenereralErrorMessage = () => {
+    SweetAlert({
+      title: "Oops",
+      text: "An error occured or the transaction was rejected",
+      type: "error"
+    });
+    this.setState({ isLoading: false });
+  };
 
   triggerAccountErrorMessage = () => {
     this.setState({
@@ -43,13 +54,15 @@ class App extends Component {
   };
 
   handleEthAmount = (e, { value }) => {
-    this.setState({ amount: value });
+    if(!this.state.account) return this.triggerAccountErrorMessage();
+
+    this.setState({ amount: value, errorMessage: false });
   };
 
   sendEth = async () => {
-    if (!this.state.account) return this.triggerAccountErrorMessage();
-
     const { selectedCharity } = this.state;
+
+    if (!this.state.account) return this.triggerAccountErrorMessage();
 
     this.setState({ isLoading: true });
 
@@ -58,7 +71,6 @@ class App extends Component {
         to: selectedCharity,
         value: web3.utils.toWei(this.state.amount, "ether"),
         from: this.state.account
-        // gas: '1000'
       });
 
       if (sendEth) {
@@ -75,13 +87,7 @@ class App extends Component {
         });
       }
     } catch (err) {
-      console.log("err", err);
-      SweetAlert({
-        title: "Oops",
-        text: "An error occured or the transaction was rejected",
-        type: "error"
-      });
-      this.setState({ isLoading: false });
+      return this.triggerGenereralErrorMessage();
     }
   };
 
