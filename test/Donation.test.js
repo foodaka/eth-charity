@@ -12,24 +12,19 @@ beforeEach( async () => {
   accounts = await web3.eth.getAccounts();
 })
 
-
 describe('it should test payment', () => {
   it('should send money', async () => {
-
 
     const initialBalanceAccount = await web3.eth.getBalance(accounts[0]);
     await web3.eth.sendTransaction({
       to: accounts[1],
-      value: web3.utils.toWei( '1' ,'ether'),
+      value: web3.utils.toWei('1' ,'ether'),
       from: accounts[0]
     })
     const finalBalanceAccount = await web3.eth.getBalance(accounts[0]);
 
     console.log('initialBalanceAccount', initialBalanceAccount);
     console.log('finalBalanceAccount', finalBalanceAccount);
-
-    // assert.isAbove(accounts[1], accounts[0])
-
+    assert( finalBalanceAccount !== initialBalanceAccount)
   })
-
 })

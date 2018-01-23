@@ -21,7 +21,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasSuccess: false,
       selectedCharity: "",
       sentSuccess: false,
       isLoading: false
@@ -32,18 +31,24 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts();
 
     if (accounts.length < 1) {
-      this.setState({
-        errorMessage: "You must log into MetaMask and use chrome to send ether"
-      });
+      return this.triggerAccountErrorMessage();
     }
     this.setState({ account: accounts[0] });
   }
+
+  triggerAccountErrorMessage = () => {
+    this.setState({
+      errorMessage: "You must log into MetaMask and use chrome to send ether"
+    });
+  };
 
   handleEthAmount = (e, { value }) => {
     this.setState({ amount: value });
   };
 
   sendEth = async () => {
+    if (!this.state.account) return this.triggerAccountErrorMessage();
+
     const { selectedCharity } = this.state;
 
     this.setState({ isLoading: true });
@@ -53,6 +58,7 @@ class App extends Component {
         to: selectedCharity,
         value: web3.utils.toWei(this.state.amount, "ether"),
         from: this.state.account
+        // gas: '1000'
       });
 
       if (sendEth) {
@@ -69,9 +75,10 @@ class App extends Component {
         });
       }
     } catch (err) {
+      console.log("err", err);
       SweetAlert({
         title: "Oops",
-        text: "An error occured",
+        text: "An error occured or the transaction was rejected",
         type: "error"
       });
       this.setState({ isLoading: false });
@@ -82,6 +89,10 @@ class App extends Component {
     this.setState({ selectedCharity: value });
   };
 
+  closeReceipt = () => {
+    this.setState({ sentSuccess: false });
+  };
+
   render() {
     const { sentSuccess } = this.state;
 
@@ -89,16 +100,15 @@ class App extends Component {
       <div className="App" style={{ backgroundImage: `url(${sprout})` }}>
         <div style={{ display: sentSuccess ? "none" : "" }}>
           <header className="App-header" />
-          <Loader
-            inverted
-            className="loading"
-            active={this.state.isLoading}
-          >
+          {this.state.errorMessage &&
+            <span className="error">
+              {" "}You must be logged into MetaMask to use this web application{" "}
+            </span>}
+          <Loader inverted className="loading" active={this.state.isLoading}>
             <span>
               Sit tight, this could take up to 30seconds to process...
             </span>
           </Loader>
-
           <div className="payment">
             <Card fluid header="Payment">
               <div className="section">
@@ -139,7 +149,7 @@ class App extends Component {
 
         {sentSuccess &&
           <div>
-            <Receipt {...this.state} />
+            <Receipt {...this.state} handleClose={this.closeReceipt} />
           </div>}
       </div>
     );

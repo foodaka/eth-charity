@@ -8,13 +8,15 @@ export const Receipt = (props) => {
     to,
     gasUsed,
     blockHash,
-    from
+    from,
+    handleClose
   } = props;
 
   return (
     <Card fluid className="receiptWrapper">
       <div className="details">
         <h2 style={{letterSpacing:'1.8px'}}>Transaction Details</h2>
+        <i className="fa fa-times iconClose" aria-hidden="true" onClick={handleClose}></i>
       </div>
       <div className="sectionDetails">
         <div>From:</div>
@@ -26,7 +28,7 @@ export const Receipt = (props) => {
       </div>
       <div className="sectionDetails">
         <div>Transaction Hash:</div>
-        <div>{transactionHash}</div>
+        <div><a className="link" href={`https://rinkeby.etherscan.io/tx/${transactionHash}`} target="_blank">{transactionHash}</a></div>
       </div>
       <div className="sectionDetails">
         <div>Gas Used:</div>

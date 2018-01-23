@@ -1,15 +1,17 @@
 .receiptWrapper {
-  background: #FFFFFF;
+  background: black !important;
   max-width: 1000px !important;
   margin: 0 auto !important;
   top: 150px;
   font-size: 18px;
+  opacity: 0.8;
 }
 
 .sectionDetails {
   display: flex;
   /*justify-content: space-between;*/
   padding: 24px;
+  color: #FFFFFF;
 }
 
 .sectionDetails > div:first-child  {
@@ -31,4 +33,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.link {
+  color: #FFFFFF;
+}
+
+.iconClose {
+  position: absolute;
+  right:18px;
+  cursor: pointer;
 }
