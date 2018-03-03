@@ -116,7 +116,7 @@ class App extends Component {
             </span>
           </Loader>
           <div className="payment">
-            <Card fluid header="Payment">
+            <Card fluid>
               <div className="section">
                 <h1 className="title">Make A Donation</h1>
                 <div className="charity">
@@ -143,7 +143,7 @@ class App extends Component {
                   className="donate"
                   inverted
                   disabled={this.state.isLoading}
-                  standard
+                  // standard={true}
                   onClick={this.sendEth}
                 >
                   Donate Now!
